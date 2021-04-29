@@ -2,8 +2,11 @@ from django.shortcuts import render,get_object_or_404
 from .models import Student, College
 from django.http import Http404
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny,IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .searilizers import *
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 def index(request):
@@ -21,6 +24,13 @@ def detail(request, id):
         'students':student,
         'colleges':college,
     })
+
+
+class DemoView(APIView):
+    permission_classes = [IsAuthenticated, ]
+    def get(self, request):
+        print(request.user)
+        return Response({"sucess":"Huryy you are autenticated"})
 
 
 class UserSet(viewsets.ModelViewSet):
